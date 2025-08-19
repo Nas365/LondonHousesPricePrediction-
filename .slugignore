@@ -1,0 +1,11 @@
+# ignore notebooks, local venv, and large artifacts
+*.ipynb
+venv/
+tests/
+docs/
+README.md
+LICENSE
+*.csv
+*.parquet
+*.pkl
+model_training.ipynb
