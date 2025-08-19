@@ -137,4 +137,7 @@ def predict():
     return jsonify({"prediction": pred, "currency": "GBP"})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    # Heroku provides the port via env var PORT
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
+
