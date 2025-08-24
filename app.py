@@ -50,6 +50,10 @@ def log_transform(x):
 
 def load_model():
     download_model_if_needed()
+    import sys, types
+    if "__main__" not in sys.modules:
+        sys.modules["__main__"] = types.SimpleNamespace()
+    setattr(sys.modules["__main__"], "log_transform", log_transform)
     with open(MODEL_PATH, "rb") as f:
         return pickle.load(f)
 
