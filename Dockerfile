@@ -25,8 +25,12 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 COPY . /app
 
 # Expose the port App Runner will hit
+ENV PORT=8080
 EXPOSE 8080
 
 # Start with gunicorn (make sure 'gunicorn' is in requirements.txt)
 # My Flask object is "app" inside app.py -> "app:app"
-CMD ["gunicorn", "-w", "2", "-k", "gthread", "-b", "0.0.0.0:8080", "app:app"]
+ENV PORT=8080
+EXPOSE 8080
+
+CMD gunicorn -w 1 -k gthread -b 0.0.0.0:$PORT app:app
