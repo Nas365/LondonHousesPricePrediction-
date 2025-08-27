@@ -1,7 +1,10 @@
 venv/
-*.ipynb
 __pycache__/
+*.ipynb
+*.csv
+*.parquet
 *.pkl
 model_cache.pkl
 .git
 .gitignore
+.DS_Store
