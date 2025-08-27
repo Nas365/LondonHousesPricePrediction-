@@ -1,0 +1,7 @@
+venv/
+*.ipynb
+__pycache__/
+*.pkl
+model_cache.pkl
+.git
+.gitignore
