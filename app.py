@@ -90,23 +90,121 @@ def health():
 # Quick HTML form
 INDEX_HTML = """
 <!doctype html>
-<title>London House Price Prediction</title>
-<h2>Predict price</h2>
-<form method="post" action="/predict-form">
-  <p><label>Floor area (sqm) <input name="floorAreaSqM" required step="any" type="number"></label></p>
-  <p><label>Bedrooms <input name="bedrooms" required type="number"></label></p>
-  <p><label>Bathrooms <input name="bathrooms" required type="number"></label></p>
-  <p><label>Living rooms <input name="livingRooms" required type="number"></label></p>
-  <p><label>Property type <input name="propertyType" required type="text" placeholder="Flat"></label></p>
-  <p><label>Tenure <input name="tenure" required type="text" placeholder="Leasehold"></label></p>
-  <p><label>Current energy rating <input name="currentEnergyRating" required type="text" placeholder="D"></label></p>
-  <p><label>Postcode area <input name="postcodeArea" required type="text" placeholder="SW1"></label></p>
-  <p><button type="submit">Predict</button></p>
-</form>
-{% if prediction is defined %}
-  <h3>Predicted price: £{{ "{:,.0f}".format(prediction) }}</h3>
-{% endif %}
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>London House Price Prediction</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+  /* Full-bleed background image (no dark overlay) */
+  body {
+    min-height: 100vh;
+    margin: 0;
+    background: url("{{ url_for('static', filename='img/london.jpg') }}") center / cover no-repeat fixed;
+    font-family: Arial, sans-serif;
+  }
+
+  /* White card */
+  .card {
+    background: rgba(255, 255, 255, 0.96);   /* clean white */
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.28);
+  }
+
+  /* Title + text colors */
+  .brand {
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: #111;            /* dark text on white card */
+  }
+  .lead, label, .form-label {
+    color: #222;
+  }
+
+  /* Inputs */
+  .form-control, .form-select {
+    background: #fff;
+    color: #111;
+    border: 1px solid #d0d5dd;
+  }
+  .form-control::placeholder { color: #9aa3af; }
+
+  /* Button */
+  .btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+  }
+
+  /* Footer note inside the card */
+  .footer {
+    color: #555;
+    font-size: 0.9rem;
+    opacity: 0.95;
+  }
+</style>
+
+</head>
+<div class="container py-5 d-flex justify-content-start">
+  <div class="col-lg-5">
+    <div class="card p-4">
+          <h1 class="brand mb-3">🏙️ London House Price Prediction</h1>
+          <p class="mb-4">Enter property details below to estimate the sale price.</p>
+
+          <form method="post" action="/predict-form" class="row g-3">
+            <div class="col-6">
+              <label class="form-label">Floor area (sqm)</label>
+              <input class="form-control" type="number" step="any" name="floorAreaSQM" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Bedrooms</label>
+              <input class="form-control" type="number" name="bedrooms" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Bathrooms</label>
+              <input class="form-control" type="number" name="bathrooms" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Living rooms</label>
+              <input class="form-control" type="number" name="livingRooms" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Property type</label>
+              <input class="form-control" type="text" name="propertyType" placeholder="Flat / Terraced / Detached" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Tenure</label>
+              <input class="form-control" type="text" name="tenure" placeholder="Leasehold / Freehold" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Energy rating</label>
+              <input class="form-control" type="text" name="currentEnergyRating" placeholder="A–G" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Postcode area</label>
+              <input class="form-control" type="text" name="postcodeArea" placeholder="E1 / SW1 / NW3…" required>
+            </div>
+
+            <div class="col-12 d-grid">
+              <button class="btn btn-primary btn-lg" type="submit">Predict price</button>
+            </div>
+          </form>
+
+          {% if prediction is defined %}
+          <hr class="border-light my-4">
+          <h3 class="mb-0">Predicted price: £{{ '{:,.0f}'.format(prediction) }}</h3>
+          {% endif %}
+
+          <div class="footer mt-4">Model status: {{ '✅ cached' if model_loaded else '⬇️ downloading' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
 """
+
 
 # Routes
 @app.get("/")
